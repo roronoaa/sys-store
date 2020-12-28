@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：当前XML文件用于配置哪个接口中抽象方法对应的SQL语句 -->
+<mapper namespace="cn.tedu.store.mapper.DistrictMapper">
+
+	<!--基于编码查询名称-->
+	<!--String getNameByCode(String code)-->
+	<select id="getNameByCode" resultType="java.lang.String">
+		select name from t_dict_district where code=#{code}
+	</select>
+
+	<!--基于父级编号查询所有子级信息-->
+	<!--List<District> listByParent(String parent)-->
+	<select id="listByParent" resultType="cn.tedu.store.entity.District">
+		select
+			id, parent,
+		    code, name
+		from
+			t_dict_district
+		where
+			parent=#{parent}
+	</select>
+	<resultMap id="districtMap" type="cn.tedu.store.entity.District">
+		<id column="id" property="id"></id>
+		<result column="parent" property="parent"/>
+		<result column="code" property="code"/>
+		<result column="name" property="name"/>
+	</resultMap>
+	<select id="listAllDistricts" resultMap="districtMap">
+		select * from t_dict_district
+		order by code
+	</select>
+</mapper>
+
+
+
+
+
+

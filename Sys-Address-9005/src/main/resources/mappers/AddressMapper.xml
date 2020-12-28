@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：当前XML文件用于配置哪个接口中抽象方法对应的SQL语句 -->
+<mapper namespace="cn.tedu.store.mapper.AddressMapper">
+
+	<resultMap id="addressMap" type="cn.tedu.store.entity.Address">
+		<id column="aid" property="aid" />
+		<result column="uid" property="uid" />
+		<result column="name" property="name" />
+		<result column="province_name" property="provinceName" />
+		<result column="province_code" property="provinceCode" />
+		<result column="city_name" property="cityName" />
+		<result column="city_code" property="cityCode" />
+		<result column="area_name" property="areaName" />
+		<result column="area_code" property="areaCode" />
+		<result column="zip" property="zip" />
+		<result column="address" property="address" />
+		<result column="phone" property="phone" />
+		<result column="tel" property="tel" />
+		<result column="tag" property="tag" />
+		<result column="is_default" property="isDefault" />
+		<result column="created_user" property="createdUser" />
+		<result column="created_time" property="createdTime" />
+		<result column="modified_user" property="modifiedUser" />
+		<result column="modified_time" property="modifiedTime" />
+	</resultMap>
+
+	<!-- 基于地址id删除一条地址记录 -->
+	<!-- Integer deleteByAid(Integer aid) -->
+	<delete id="deleteByAid">
+		delete from
+			t_address
+		where aid=#{aid}
+	</delete>
+
+	<!-- 基于用户id查询用户最后更新的一条收货地址记录 -->
+	<!-- Address findLastModified(Integer uid) -->
+	<select id="findLastModified"
+			resultMap="addressMap">
+		select
+			*
+		from
+			t_address
+		where
+			uid=#{uid}
+		order by
+			modified_time desc
+		limit 0,1;
+	</select>
+
+
+	<!-- 将一条收货地址设为默认收货地址 -->
+	<!-- Integer updateDefault(
+            @Param("aid") Integer aid,
+            @Param("username") String username,
+            @Param("modifiedTime") Date modifiedTime) -->
+	<update id="updateDefault">
+		update
+			t_address
+		set
+			is_default=1,
+			modified_user=#{username},
+			modified_time=#{modifiedTime}
+		where
+			aid=#{aid};
+	</update>
+
+	<!-- 将一个用户的所有收货地址设为非默认 -->
+	<!-- Integer updateNonDefault(Integer uid) -->
+	<update id="updateNonDefault">
+		update
+			t_address
+		set
+			is_default=0
+		where
+			uid=#{uid};
+	</update>
+
+	<!-- 根据aid查询一条收货地址数据 -->
+	<!-- Address findByAid(Integer aid) -->
+	<select id="findByAid"
+			resultMap="addressMap">
+		select
+			*
+		from
+			t_address
+		where
+			aid=#{aid}
+	</select>
+
+
+	<!--基于用户id查询收货地址-->
+	<!--List<Address> listByUid(Integer uid)-->
+	<select id="listByUid" resultMap="addressMap">
+		select
+			*
+		from
+			t_address
+		where
+			uid=#{uid}
+		order by
+			is_default desc,
+			modified_time desc
+	</select>
+
+	<!--保存一条收货地址记录-->
+	<!--Integer saveAddress(Address address)-->
+	<insert id="saveAddress">
+		insert into t_address(
+		    uid, name,
+			province_name, province_code,
+			city_name, city_code,
+			area_name, area_code,
+			zip, address,
+			phone, tel,
+			tag, is_default,
+			created_user,created_time,
+			modified_user,modified_time
+		)values(
+		   #{uid}, #{name},
+		   #{provinceName}, #{provinceCode},
+		   #{cityName}, #{cityCode},
+		   #{areaName}, #{areaCode},
+		   #{zip}, #{address},
+		   #{phone}, #{tel},
+		   #{tag}, #{isDefault},
+		   #{createdUser},now(),
+		   #{modifiedUser},now()
+		)
+	</insert>
+
+
+	<!--基于用户id查询收货地址数量-->
+	<!--Integer countByUid(Integer uid)-->
+	<select id="countByUid" resultType="java.lang.Integer">
+		select count(*) from t_address where uid=#{uid}
+	</select>
+
+</mapper>
+
+
+
+
+
+

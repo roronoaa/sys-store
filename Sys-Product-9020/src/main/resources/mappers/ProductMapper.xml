@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：当前XML文件用于配置哪个接口中抽象方法对应的SQL语句 -->
+<mapper namespace="cn.tedu.store.mapper.ProductMapper">
+
+	<resultMap id="productResultMap" type="cn.tedu.store.entity.Product">
+		<id column="id" property="id"></id>
+		<result column="item_type" property="itemType"/>
+		<result column="title" property="title"/>
+		<result column="sell_point" property="sellPoint"/>
+		<result column="price" property="price"/>
+		<result column="num" property="num"/>
+		<result column="image" property="image"/>
+		<result column="status" property="status"/>
+		<result column="priority" property="priority"/>
+		<result column="created_user" property="createdUser" />
+		<result column="created_time" property="createdTime" />
+		<result column="modified_user" property="modifiedUser" />
+		<result column="modified_time" property="modifiedTime" />
+		<association property="category" javaType="cn.tedu.store.entity.ProductCategory">
+			<id column="cid" property="id"></id>
+			<result column="cPid" property="parentId"/>
+			<result column="cname" property="name"/>
+			<result column="cStatus" property="status"/>
+			<result column="cSortOrder" property="sortOrder"/>
+			<result column="cIsParent" property="isParent"/>
+		</association>
+	</resultMap>
+
+	<resultMap id="categoryMap" type="cn.tedu.store.entity.ProductCategory">
+		<id column="id" property="id"></id>
+		<result column="parent_id" property="parentId"/>
+		<result column="name" property="name"/>
+		<result column="status" property="status"/>
+		<result column="sort_order" property="sortOrder"/>
+		<result column="is_parent" property="isParent"/>
+		<result column="created_user" property="createdUser" />
+		<result column="created_time" property="createdTime" />
+		<result column="modified_user" property="modifiedUser" />
+		<result column="modified_time" property="modifiedTime" />
+	</resultMap>
+
+
+	<!--基于商品id更新商品库存数量-->
+	<!--Integer updateNumById(@Param("id") Integer id,@Param("num") Integer num)-->
+	<update id="updateNumById" >
+		update
+		    t_product
+		set
+		    num=#{num}
+		where
+			id=#{id}
+	</update>
+
+
+	<!--基于商品名称模糊查询总数据条数-->
+	<!--Integer getCountByName(String name)-->
+	<select id="getCountByName" resultType="java.lang.Integer">
+		select count(*) from t_product where status=1 and title like concat('%',#{name},'%')
+	</select>
+
+
+	<!-- 基于商品名称模糊、分页查询商品 -->
+	<!-- List<Product> listAllByName(@Param("name") String name,
+                               @Param("recordIndex") Integer recordIndex,
+                               @Param("pageSize") Integer pageSize)-->
+	<select id="listAllByName" resultMap="productResultMap">
+		select
+			*
+		from
+			t_product
+		where
+			title like concat('%',#{name},'%')
+		  and
+			status=1
+		order by
+			priority desc
+		limit
+			#{recordIndex},#{pageSize}
+	</select>
+
+	<!--基于商品种类id查询总数据条数-->
+	<!--Integer getCountByCid(Integer cid)-->
+	<select id="getCountByCid" resultType="java.lang.Integer">
+		select count(*) from t_product where status=1 and category_id=#{cid}
+	</select>
+
+
+	<!-- 基于商品种类id分页查询商品 -->
+	<!-- List<Product> listAllByCid(@Param("cid") Integer cid,
+                               @Param("recordIndex") Integer recordIndex,
+                               @Param("pageSize") Integer pageSize)-->
+	<select id="listAllByCid" resultMap="productResultMap">
+		select
+		    *
+		from
+		    t_product
+		where
+		    category_id=#{cid}
+		and
+			status=1
+		order by
+			priority desc
+		limit
+			#{recordIndex},#{pageSize}
+	</select>
+
+	<!--查询所有商品种类-->
+	<!--List<ProductCategory> listAllCategory()-->
+	<select id="listAllCategory" resultMap="categoryMap">
+		select id,parent_id, name,sort_order
+		from t_product_category
+		where status=1
+	</select>
+
+
+	<!--基于商品种类id随机查询4种商品信息-->
+	<!--List<Product> listByCid(Integer cid)-->
+	<!--order by rand() 在超过7W条数据以上不要用-->
+	<select id="listByCid" resultMap="productResultMap">
+		select * from t_product where category_id=#{cid}
+		order by rand() limit 4
+	</select>
+
+	<!--基于商品id查询商品信息,查询添加排他锁-->
+	<!--Product getByIdForUpdate(Integer id)-->
+	<select id="getByIdForUpdate" resultMap="productResultMap">
+		select
+			*
+		from
+			t_product
+		where
+			id=#{id}
+		for update
+	</select>
+
+	<!--基于商品id查询商品信息-->
+	<!--Product getById(Integer id)-->
+	<select id="getById" resultMap="productResultMap">
+		select
+			t1.*,
+			t2.id as cid, t2.parent_id as cPid,
+			t2.name as cname, t2.status as cStatus,
+			t2.sort_order as cSortOrder,
+			t2.is_parent as cIsParent
+		from
+			t_product t1 join t_product_category t2
+		on
+			t1.category_id=t2.id
+		where
+			t1.id=#{id}
+	</select>
+
+	<!--显示热销排行商品-->
+	<!--List<Product> listHotProduct()-->
+	<select id="listHotProduct" resultMap="productResultMap">
+		select
+			t1.*,
+		    t2.id as cid, t2.parent_id as cPid,
+		    t2.name as cname, t2.status as cStatus,
+			t2.sort_order as cSortOrder,
+			t2.is_parent as cIsParent
+		from
+			t_product t1 join t_product_category t2
+		on
+			t1.category_id=t2.id
+		where
+			t1.status=1 and t1.num > 0
+		order by
+			t1.priority desc
+		limit 0,4
+	</select>
+
+</mapper>
+
+
+
+
+
+

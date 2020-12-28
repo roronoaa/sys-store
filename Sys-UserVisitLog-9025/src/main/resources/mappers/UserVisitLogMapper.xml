@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：当前XML文件用于配置哪个接口中抽象方法对应的SQL语句 -->
+<mapper namespace="cn.tedu.store.mapper.UserVisitLogMapper">
+
+	<!--基于用户id查询近7天访问最多的商品种类id-->
+	<!--Integer getCidByUid(Integer uid)-->
+	<select id="getCidByUid" resultType="java.lang.Integer">
+		select
+		    cid
+		from
+			t_user_visit_log
+		where
+			DATEDIFF(CURDATE(), DATE(created_time)) &lt; 7
+		and
+		    uid=#{uid}
+		group by
+			cid
+		order by
+			count(*) desc
+		limit 1
+	</select>
+
+
+
+	<!--添加一条访问商品详情记录-->
+	<!--Integer insertVisitLog(UserVisitLog log)-->
+	<insert id="insertVisitLog">
+		insert into t_user_visit_log(
+			uid,pid,
+			cid,created_time
+		)values(
+			#{uid},#{pid},
+			#{cid},now()
+		)
+	</insert>
+
+</mapper>
+
+
+
+
+
+

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：当前XML文件用于配置哪个接口中抽象方法对应的SQL语句 -->
+<mapper namespace="cn.tedu.store.mapper.CartMapper">
+
+	<resultMap id="cartMap" type="cn.tedu.store.entity.Cart">
+		<id column="cid" property="cid" />
+		<result column="uid" property="uid" />
+		<result column="pid" property="pid" />
+		<result column="price" property="price" />
+		<result column="num" property="num" />
+		<result column="created_user" property="createdUser" />
+		<result column="created_time" property="createdTime" />
+		<result column="modified_user" property="modifiedUser" />
+		<result column="modified_time" property="modifiedTime" />
+	</resultMap>
+
+	<!--基于购物车id数组查询购物车记录-->
+	<!--List<CartVO> listByCids(Integer[] cids)-->
+	<select id="listByCids"
+			resultType="cn.tedu.store.entity.CartVO">
+		select
+			t1.cid, t1.pid,
+			t1.price, t1.num, t1.uid,
+			t2.image, t2.title,
+			t2.price as realPrice
+		from
+			t_cart t1 join t_product t2
+		on
+			t1.pid = t2.id
+		where
+			cid in
+		<foreach collection="cids" item="cid" separator=","
+				 open="(" close=")" >
+			#{cid}
+		</foreach>
+		order by
+			t1.modified_time desc
+	</select>
+
+
+	<!--基于购物车id查询购物车记录，查询时添加排他锁-->
+	<!--Cart getByCidForUpdate(Integer cid)-->
+	<select id="getByCidForUpdate" resultMap="cartMap">
+		select
+			*
+		from
+			t_cart
+		where
+			cid=#{cid}
+		for update
+	</select>
+
+	<!--基于购物车id数组查询实际存在的数据条数-->
+	<!--Integer getCount(@Param("cids") Integer[] cids)-->
+	<select id="getCount" resultType="java.lang.Integer">
+		select count(*) from t_cart where cid in
+		<foreach collection="cids" item="cid"
+				 open="("  close=")"  separator=",">
+			#{cid}
+		</foreach>
+		for update
+	</select>
+
+	<!--基于购物车id数组批量删除购物车记录-->
+	<!--Integer deleteCartList(@Param("cids") Integer[] cids)-->
+	<delete id="deleteCartList" >
+		delete from t_cart
+		where cid in
+		<foreach collection="cids" item="cid"
+			open="("  close=")"  separator=",">
+				#{cid}
+		</foreach>
+	</delete>
+
+	<!--基于购物车id删除购物车记录-->
+	<!--Cart getByCid(Integer cid)-->
+	<select id="getByCid" resultMap="cartMap">
+		select
+			*
+		from
+			t_cart
+		where
+			cid=#{cid}
+	</select>
+
+	<!--基于购物车id删除购物车记录-->
+	<!--Integer deleteCartByCid(Integer cid)-->
+	<delete id="deleteCartByCid" >
+		delete from t_cart where cid=#{cid}
+	</delete>
+
+	<!--基于用户id查询所有购物车记录-->
+	<!--List<CartVO> listCart(Integer uid)-->
+	<select id="listCart" resultType="cn.tedu.store.entity.CartVO" >
+		select
+			t1.cid, t1.pid,
+			t2.image, t2.title,
+			t2.price as realPrice, t1.price,
+			t1.num
+		from
+			t_cart t1 left join t_product t2
+		on
+			t1.pid = t2.id
+		where
+			t1.uid=#{uid}
+		order by
+			t1.modified_time desc;
+	</select>
+
+	<!--添加一条购物车记录-->
+	<!--Integer insertCart(Cart cart)-->
+	<insert id="insertCart" >
+		insert into t_cart(
+			uid, pid,
+			price, num,
+			created_user, created_time,
+			modified_user, modified_time
+		)values(
+		   #{uid}, #{pid},
+		   #{price}, #{num},
+		   #{createdUser}, now(),
+		   #{modifiedUser}, now()
+		)
+	</insert>
+
+	<!--基于id更新购物车记录的数量-->
+	<!--Integer updateNum(@Param("cid") Integer cid,
+                      @Param("num") Integer num,
+                      @Param("username") String username,
+                      @Param("modifiedTime") Date modifiedTime)-->
+	<update id="updateNum">
+		update
+		    t_cart
+		set
+			num=#{num}, modified_user=#{username},
+		    modified_time=#{modifiedTime}
+		where
+			cid=#{cid}
+	</update>
+
+	<!--基于用户id和商品id查询购物车记录-->
+	<!--Cart getByUidAndPid(@Param("uid") Integer uid,
+                        @Param("pid") Integer pid)-->
+	<select id="getByUidAndPid" resultMap="cartMap">
+		select
+			*
+		from
+			t_cart
+		where
+			uid=#{uid}
+		and
+		    pid=#{pid}
+	</select>
+
+</mapper>
+
+
+
+
+
+

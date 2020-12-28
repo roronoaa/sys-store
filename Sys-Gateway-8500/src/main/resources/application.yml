@@ -1,0 +1,66 @@
+server:
+  port: 8500
+
+spring:
+  application:
+    name: GATEWAY
+    main:
+      allow-bean-definition-overriding: true
+  cloud:
+    gateway:
+      routes:
+        - id: address_route
+          uri: lb://ADDRESS/
+          predicates:
+            - Path=/addresses/**
+
+        - id: cart_route
+          uri: lb://CART/
+          predicates:
+            - Path=/carts/**
+
+        - id: district_route
+          uri: lb://DISTRICT/
+          predicates:
+            - Path=/districts/**
+
+        - id: order_route
+          uri: lb://ORDER/
+          predicates:
+            - Path=/orders/**
+
+        - id: product_route
+          uri: lb://PRODUCT/
+          predicates:
+            - Path=/products/**
+
+        - id: user_route
+          uri: lb://USER/
+          predicates:
+            - Path=/users/**
+
+        - id: uservisitlog_route
+          uri: lb://USERVISITLOG/
+          predicates:
+            - Path=/userVisitLog/**
+      discovery:
+        locator:
+          enabled: true
+      globalcors:
+        cors-configurations:
+          '[/**]': # 匹配所有请求
+            allowedOrigins: "*" #跨域处理 允许所有的域
+            allowedMethods: # 支持的方法
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka

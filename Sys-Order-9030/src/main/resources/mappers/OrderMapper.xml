@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：当前XML文件用于配置哪个接口中抽象方法对应的SQL语句 -->
+<mapper namespace="cn.tedu.store.mapper.OrderMapper">
+
+	<resultMap id="orderMap" type="cn.tedu.store.entity.Order">
+		<id column="id" property="id" />
+		<result column="uid" property="uid" />
+		<result column="recv_name" property="recvName" />
+		<result column="recv_phone" property="recvPhone" />
+		<result column="recv_province" property="recvProvince" />
+		<result column="recv_city" property="recvCity" />
+		<result column="recv_area" property="recvArea" />
+		<result column="recv_address" property="recvAddress" />
+		<result column="status" property="status" />
+		<result column="price" property="price" />
+		<result column="order_time" property="orderTime" />
+		<result column="pay_time" property="payTime" />
+		<result column="created_user" property="createdUser" />
+		<result column="created_time" property="createdTime" />
+		<result column="modified_user" property="modifiedUser" />
+		<result column="modified_time" property="modifiedTime" />
+		<collection property="orderItems" ofType="cn.tedu.store.entity.OrderItem">
+			<id column="tid" property="id" />
+			<result column="oid" property="oid" />
+			<result column="pid" property="pid" />
+			<result column="num" property="num" />
+			<result column="itemPrice" property="price" />
+			<result column="image" property="image" />
+			<result column="title" property="title" />
+		</collection>
+	</resultMap>
+
+	<!--基于用户id查询该用户所有订单记录-->
+	<!-- List<Order> listByUid(Integer uid)-->
+	<select id="listByUid" resultMap="orderMap">
+		select
+			t1.*, t2.id as tid,
+			t2.oid as oid, t2.pid as pid,
+			t2.num as num, t2.price as itemPrice,
+			t2.image as image, t2.title as title
+		from
+			t_order t1 join t_order_item t2
+		on
+			t1.id=t2.oid
+		where
+			t1.uid=#{uid}
+		order by
+			created_time desc
+	</select>
+
+	<!--基于订单id修改订单状态-->
+	<!-- Integer updateStatus(
+            @Param("id") Integer id,
+            @Param("status") Integer status,
+            @Param("username") String username,
+            @Param("modifiedTime") Date modifiedTime)-->
+	<update id="updateStatus">
+		update
+			t_order
+		set
+			status=#{status},
+		    modified_user=#{username},
+		    modified_time=#{modifiedTime}
+		where
+			id=#{id}
+	</update>
+	<update id="updatePayTime">
+		update t_order
+		set
+			pay_time=#{payTime},
+			modified_user=#{username},
+			modified_time=#{payTime}
+		where
+			id=#{oid}
+	</update>
+	<!--基于订单id查询订单数据-->
+	<!--Order getById(Integer id)-->
+	<select id="getById" resultMap="orderMap">
+		select
+		    t1.*, t2.id as tid,
+		    t2.oid as oid, t2.pid as pid,
+		    t2.num as num, t2.price as itemPrice,
+		    t2.image as image, t2.title as title
+		from
+			t_order t1 join t_order_item t2
+		on
+		    t1.id=t2.oid
+		where
+			t1.id=#{id}
+	</select>
+
+
+	<!--添加一条订单记录-->
+	<!--Integer insertOrder(Order order)-->
+	<!--让MyBatis返回数据库生成的订单id-->
+	<insert id="insertOrder"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into t_order(
+			uid, recv_name,
+		    recv_phone, recv_province,
+		    recv_city, recv_area,
+			recv_address,status,
+		    price, order_time,
+		    pay_time,
+			created_user, created_time,
+			modified_user, modified_time
+		)values(
+		   #{uid}, #{recvName},
+		   #{recvPhone}, #{recvProvince},
+		   #{recvCity}, #{recvArea},
+		   #{recvAddress}, #{status},
+		   #{price}, now(),
+		   #{payTime},
+		   #{createdUser}, now(),
+		   #{modifiedUser}, now()
+		)
+	</insert>
+
+	<!--添加一条订单项记录-->
+	<!--Integer insertOrderItem(OrderItem orderItem)-->
+	<insert id="insertOrderItem">
+		insert into t_order_item(
+			oid, pid,
+			num, price,
+			image,title,
+			created_user, created_time,
+			modified_user, modified_time
+		)values (
+			#{oid}, #{pid},
+			#{num}, #{price},
+			#{image}, #{title},
+			#{createdUser}, now(),
+			#{modifiedUser}, now()
+		)
+	</insert>
+	<delete id="deleteOrder">
+		delete from t_order
+		where id=#{oid}
+	</delete>
+	<delete id="deleteOrderItem">
+		delete from t_order_item
+		where oid=#{oid}
+	</delete>
+</mapper>
+
+
+
+
+
+
