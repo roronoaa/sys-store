@@ -45,12 +45,18 @@ public class DistrictServiceImpl implements IDistrictService {
             }else{
                 for(MyDistrict md:mylist){
                     if(md.getCode().equals(d.getParent())){
+                        if(md.isEmpty()){
+                            md.init();
+                        }
                         md.addChildren(new MyDistrict(d.getId(),d.getParent(),d.getCode(),d.getName()));
                         break;
                     }
                     List<MyDistrict> temp=md.getChildren();
                     for(MyDistrict t:temp){
                         if(t.getCode().equals(d.getParent())){
+                            if(t.isEmpty()){
+                                t.init();
+                            }
                             t.addChildren(new MyDistrict(d.getId(),d.getParent(),d.getCode(),d.getName()));
                             md.setChildren(temp);
                             break;

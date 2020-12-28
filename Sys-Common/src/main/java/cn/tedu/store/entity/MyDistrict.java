@@ -15,7 +15,7 @@ public class MyDistrict {
         this.parent = parent;
         this.code = code;
         this.name = name;
-        children=new ArrayList<>();
+        //children=new ArrayList<>();
     }
 
     public Integer getId() {
@@ -57,8 +57,13 @@ public class MyDistrict {
     public void setChildren(List<MyDistrict> children) {
         this.children = children;
     }
-
+    public void init() {
+         children=new ArrayList<>();
+    }
     public void addChildren(MyDistrict myDistrict){
         children.add(myDistrict);
+    }
+    public boolean isEmpty(){
+        return children==null;
     }
 }
