@@ -20,14 +20,14 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        InterceptorRegistration registration = registry.addInterceptor(loginInterceptor);
-        registration.addPathPatterns("/**");
-        List<String> list = new ArrayList<>();
-        list.add("/users/regist");
-        list.add("/users/login");
-        list.add("/users/checkUsername");
-        list.add("/products/**");
-        list.add("/districts/**");
-        registration.excludePathPatterns(list);
+//        InterceptorRegistration registration = registry.addInterceptor(loginInterceptor);
+//        registration.addPathPatterns("/**");
+//        List<String> list = new ArrayList<>();
+//        list.add("/users/regist");
+//        list.add("/users/login");
+//        list.add("/users/checkUsername");
+//        list.add("/products/**");
+//        list.add("/districts/**");
+//        registration.excludePathPatterns(list);
     }
 }

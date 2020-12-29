@@ -19,6 +19,7 @@
         <module>Sys-Product-9020</module>
         <module>Sys-UserVisitLog-9025</module>
         <module>Sys-Order-9030</module>
+        <module>Sys-HystrixDashBoard-8505</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>
