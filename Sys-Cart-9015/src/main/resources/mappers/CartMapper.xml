@@ -107,7 +107,7 @@
 		where
 			t1.uid=#{uid}
 		order by
-			t1.modified_time desc;
+			t1.cid created_time;
 	</select>
 
 	<!--添加一条购物车记录-->
