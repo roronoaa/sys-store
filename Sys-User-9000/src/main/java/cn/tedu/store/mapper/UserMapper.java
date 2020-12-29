@@ -77,4 +77,5 @@ public interface UserMapper {
     Integer deleteFavorite(@Param("uid") Integer uid,@Param("pid") Integer pid);
 
     Integer findFavorite(@Param("uid")Integer uid,@Param("pid")Integer pid);
+    Integer addPoint(@Param("uid")Integer uid,@Param("point")Integer point);
 }

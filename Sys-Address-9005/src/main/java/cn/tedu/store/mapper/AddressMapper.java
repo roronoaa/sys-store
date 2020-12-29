@@ -68,5 +68,11 @@ public interface AddressMapper {
      * @return
      */
     Integer countByUid(Integer uid);
+    /**
+     * 基于aid修改收货地址
+     * @param address
+     * @return
+     */
+    Integer updateAddressByAid(Address address);
 
 }

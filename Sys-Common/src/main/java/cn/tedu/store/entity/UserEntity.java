@@ -17,11 +17,11 @@ public class UserEntity extends BaseEntity{
     private String email;
     private Integer gender; //0代表女，1代表男
     private String avatar; // 头像图片路径
-
+    private Integer point;
     public UserEntity() {
     }
 
-    public UserEntity(String createdUser, Date createdTime, String modifiedUser, Date modifiedTime, Integer uid, String username, String password, String salt, Integer isDelete, String phone, String email, Integer gender, String avatar) {
+    public UserEntity(String createdUser, Date createdTime, String modifiedUser, Date modifiedTime, Integer uid, String username, String password, String salt, Integer isDelete, String phone, String email, Integer gender, String avatar, Integer point) {
         super(createdUser, createdTime, modifiedUser, modifiedTime);
         this.uid = uid;
         this.username = username;
@@ -32,6 +32,15 @@ public class UserEntity extends BaseEntity{
         this.email = email;
         this.gender = gender;
         this.avatar = avatar;
+        this.point = point;
+    }
+
+    public Integer getPoint() {
+        return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
     }
 
     public Integer getUid() {

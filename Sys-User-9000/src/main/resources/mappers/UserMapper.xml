@@ -44,7 +44,7 @@
 	<!--UserEntity findByUid(Integer uid)-->
 	<select id="findByUid" resultMap="userMap">
 		select
-		    password, salt, is_delete
+		    password, salt, is_delete,point
 		from
 			t_user
 		where
@@ -98,6 +98,7 @@
 		<result column="email" property="email" />
 		<result column="gender" property="gender" />
 		<result column="avatar" property="avatar" />
+		<result column="point" property="point"/>
 		<result column="created_user" property="createdUser" />
 		<result column="created_time" property="createdTime" />
 		<result column="modified_user" property="modifiedUser" />
@@ -148,6 +149,11 @@
 		where uid=#{uid}
 		and pid=#{pid}
 	</select>
+	<update id="addPoint">
+		update t_user
+		set point=#{point}+point
+		where uid=#{uid}
+	</update>
 </mapper>
 
 

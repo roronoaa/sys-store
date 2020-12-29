@@ -1,6 +1,7 @@
 package cn.tedu.store.service.Impl;
 
 import cn.tedu.store.entity.Address;
+import cn.tedu.store.entity.UserEntity;
 import cn.tedu.store.ex.*;
 import cn.tedu.store.mapper.AddressMapper;
 import cn.tedu.store.service.IAddressService;
@@ -209,4 +210,45 @@ public class AddressServiceImpl implements IAddressService {
             throw new InsertException("添加地址异常：地址添加失败");
         }
     }
+    @Override
+    public void updateAddressByAid(Address address, UserEntity user) throws AddressNotFoundException {
+        if(address==null)
+            throw new ServiceException("更新地址异常：更新地址不存在");
+        Address addressExist = null;
+        try{
+            addressExist = mapper.findByAid(address.getAid());
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new UpdateException("添加地址异常：" + e.getMessage());
+        }
+        if(addressExist == null){
+            throw new UpdateException("更新地址异常：更新的地址aid不存在！");
+        }
+        addressExist.setName(address.getName());
+        addressExist.setProvinceName(address.getProvinceName());
+        addressExist.setProvinceCode(address.getProvinceCode());
+        addressExist.setCityName(address.getCityName());
+        addressExist.setCityCode(address.getCityCode());
+        addressExist.setAreaName(address.getAreaName());
+        addressExist.setAreaCode(address.getAreaCode());
+        addressExist.setAddress(address.getAddress());
+        addressExist.setPhone(address.getPhone());
+        addressExist.setTel(address.getTel());
+        addressExist.setTag(address.getTag());
+        addressExist.setZip(address.getZip());
+        addressExist.setModifiedUser(user.getUsername());
+        addressExist.setModifiedTime(new Date());
+        int row=0;
+        try{
+            row=mapper.updateAddressByAid(addressExist);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new UpdateException("更新地址异常："+e.getMessage(),e);
+        }
+        // 判断返回值是否不为1
+        if(row!=1){
+            throw new UpdateException("更新地址异常：地址更新失败");
+        }
+    }
+
 }

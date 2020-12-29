@@ -1,6 +1,7 @@
 package cn.tedu.store.service;
 
 import cn.tedu.store.entity.Address;
+import cn.tedu.store.entity.UserEntity;
 import cn.tedu.store.ex.*;
 import cn.tedu.store.service.ex.AddressCountLimitException;
 import cn.tedu.store.service.ex.AddressNotFoundException;
@@ -66,5 +67,11 @@ public interface IAddressService {
      */
     void createAddress(Integer uid,String username, Address address)
             throws AddressCountLimitException, InsertException;
+    /**
+     * 根据Aid修改收货地址
+     * @param address
+     */
+    void updateAddressByAid(Address address, UserEntity user)
+            throws AddressNotFoundException;
 
 }

@@ -5,6 +5,7 @@ import cn.tedu.store.entity.UserEntity;
 import cn.tedu.store.ex.*;
 import cn.tedu.store.service.IUserService;
 import cn.tedu.store.util.JsonResult;
+import com.netflix.ribbon.proxy.annotation.Http;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -227,4 +228,11 @@ public class UserController {
         return JsonResult.getSuccessJR(service.isFavorite(user.getUid(),pid));
     }
 
+    @PostMapping("/addPoint")
+    public JsonResult<Void> addPoint(HttpSession session,Integer point){
+        UserEntity user=(UserEntity)session.getAttribute("user");
+        service.addPoint(user.getUid(),point);
+        session.setAttribute("user",service.queryByUid(user.getUid()));
+        return JsonResult.getSuccessJR();
+    }
 }

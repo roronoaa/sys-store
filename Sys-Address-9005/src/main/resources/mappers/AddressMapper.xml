@@ -137,6 +137,26 @@
 	<select id="countByUid" resultType="java.lang.Integer">
 		select count(*) from t_address where uid=#{uid}
 	</select>
+	<update id="updateAddressByAid">
+		update
+			t_address
+		set
+			uid=#{uid}, name=#{name},
+			province_name=#{provinceName}, province_code=#{provinceCode},
+			city_name=#{cityName}, city_code=#{cityCode},
+			area_name=#{areaName}, area_code=#{areaCode},
+			zip=#{zip}, address=#{address},
+			phone=#{phone}, tel=#{tel},
+			tag=#{tag}, is_default=#{isDefault},
+			created_user=#{createdUser},created_time=now(),
+			modified_user=#{modifiedUser},modified_time=now()
+		where
+			aid=#{aid}
+	</update>
+
+	<select id="countByAid">
+		select count(*) from t_address where aid=#{aid}
+	</select>
 
 </mapper>
 

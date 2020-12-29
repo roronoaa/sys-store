@@ -289,7 +289,7 @@ public class UserServiceImpl implements IUserService {
         // 将加密信息添加到user中
         user.setPassword(md5Password);
         user.setSalt(salt);
-
+        user.setPoint(0);
         // 将user中的is_delete设为0
         user.setIsDelete(0);
         // 向user中设置createdUser和modifiedUser
@@ -387,5 +387,10 @@ public class UserServiceImpl implements IUserService {
      */
     public Integer isFavorite(Integer uid,Integer pid){
         return mapper.findFavorite(uid,pid);
+    }
+
+    @Override
+    public Integer addPoint(Integer uid,Integer point) {
+        return mapper.addPoint(uid,point);
     }
 }

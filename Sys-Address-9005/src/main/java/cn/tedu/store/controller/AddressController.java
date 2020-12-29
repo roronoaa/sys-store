@@ -51,4 +51,11 @@ public class AddressController {
         return service.findByAid(aid);
     }
 
+    @PostMapping("/updateAddressByAid")
+    public JsonResult<Void> updateAddressByAid(Address address, HttpSession session){
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        service.updateAddressByAid(address, user);
+        return JsonResult.getSuccessJR();
+    }
+
 }

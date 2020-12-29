@@ -122,4 +122,5 @@ public interface IUserService {
      */
     void deleteFavorite(Integer uid,Integer pid);
     Integer isFavorite(Integer uid,Integer pid);
+    Integer addPoint(Integer uid,Integer point);
 }
