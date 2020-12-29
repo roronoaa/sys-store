@@ -4,6 +4,7 @@ import cn.tedu.store.entity.*;
 import cn.tedu.store.service.IProductService;
 import cn.tedu.store.service.IUserVisitLogService;
 import cn.tedu.store.util.JsonResult;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +49,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}/get")
+    @HystrixCommand(fallbackMethod = "findByIdHystrix")
     public JsonResult<Product> findById(@PathVariable("id") Integer id, HttpSession session){
         Product product=service.findById(id);
         // 生成访问记录
@@ -62,6 +64,10 @@ public class ProductController {
             logService.saveVisitLog(log);
         }
         return JsonResult.getSuccessJR(product);
+    }
+
+    public JsonResult<Product> findByIdHystrix(@PathVariable("id") Integer id, HttpSession session) {
+        return JsonResult.getFailed("product: " + id + "未找到, 商品服务熔断!");
     }
 
     @GetMapping("/hot")

@@ -17,6 +17,13 @@ public class JsonResult<T> {
         return new JsonResult<>(1000,"OK",data);
     }
 
+    public static <T> JsonResult<T> getFailed(String message) {
+        return new JsonResult<>(2000, message);
+    }
+
+    public static <T> JsonResult<T> getFailed(String message, T data) {
+        return new JsonResult<>(2000, message, data);
+    }
     public JsonResult() {
     }
 
