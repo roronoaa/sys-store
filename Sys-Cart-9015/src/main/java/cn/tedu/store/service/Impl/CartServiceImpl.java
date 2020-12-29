@@ -163,7 +163,7 @@ public class CartServiceImpl implements ICartService {
         if(cart==null){  // 是：添加新购物车记录
             // 创建购物车记录，封装必要的属性，包括日志字段
             cart=new Cart(username,null,username,null,
-                    null,uid,pid,product.getPrice(),num);
+                    null,uid,pid,product.getPrice(),num,0);
             // 调用持久层方法，添加购物车记录
             Integer row=mapper.insertCart(cart);
             // 判断返回值是否不为1
@@ -182,6 +182,11 @@ public class CartServiceImpl implements ICartService {
                 throw new UpdateException("添加购物车异常：记录更新失败");
             }
         }
+    }
+
+    @Override
+    public Integer setCheck(Integer uid,Integer[] cids,Integer check) {
+        return mapper.setCheck(uid,cids,check);
     }
 
 }

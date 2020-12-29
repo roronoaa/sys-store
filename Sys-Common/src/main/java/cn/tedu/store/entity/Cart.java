@@ -13,17 +13,18 @@ public class Cart extends BaseEntity {
     private Integer pid;
     private Long price;
     private Integer num;
-
+    private Integer check;
     public Cart() {
     }
 
-    public Cart(String createdUser, Date createdTime, String modifiedUser, Date modifiedTime, Integer cid, Integer uid, Integer pid, Long price, Integer num) {
+    public Cart(String createdUser, Date createdTime, String modifiedUser, Date modifiedTime, Integer cid, Integer uid, Integer pid, Long price, Integer num, Integer check) {
         super(createdUser, createdTime, modifiedUser, modifiedTime);
         this.cid = cid;
         this.uid = uid;
         this.pid = pid;
         this.price = price;
         this.num = num;
+        this.check = check;
     }
 
     public Integer getCid() {

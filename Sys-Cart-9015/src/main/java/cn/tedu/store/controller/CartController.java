@@ -68,4 +68,9 @@ public class CartController {
         List<CartVO> data=service.findByCids(cids, uid);
         return data;
     }
+    @GetMapping("/setCheck")
+    public JsonResult<Integer> setCheck(HttpSession session,Integer[] cids,Integer check){
+        UserEntity user=(UserEntity)session.getAttribute("user");
+        return JsonResult.getSuccessJR(service.setCheck(user.getUid(),cids,check));
+    }
 }
