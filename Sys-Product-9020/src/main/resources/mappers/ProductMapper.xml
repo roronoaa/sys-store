@@ -76,20 +76,20 @@
 		  and
 			status=1
 		order by
-		<if test="order==null">
+		<if test="tag==0">
 			priority desc,price desc
 		</if>
-		<if test="order==1">
-			priority desc
-		</if>
-		<if test="order==2">
-			price desc
-		</if>
-		<if test="order==3">
+		<if test="tag==1 and order==1">
 			priority asc
 		</if>
-		<if test="order==4">
+		<if test="tag==1 and order==0">
+			priority desc
+		</if>
+		<if test="tag==2 and order==1">
 			price asc
+		</if>
+		<if test="tag==2 and order==0">
+			price desc
 		</if>
 		limit
 			#{recordIndex},#{pageSize}

@@ -34,6 +34,7 @@ public interface ProductMapper {
      * @return
      */
     List<Product> listAllByName(@Param("name") String name,
+                                @Param("tag")Integer tag,
                                 @Param("order")Integer order,
                                 @Param("recordIndex") Integer recordIndex,
                                 @Param("pageSize") Integer pageSize);

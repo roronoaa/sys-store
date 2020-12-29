@@ -63,7 +63,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public PageRecord<List<Product>> findProductByName(String name, Integer currentPage, Integer pageSize) throws RecordNotFoundException {
+    public PageRecord<List<Product>> findProductByName(String name,Integer tag,Integer order, Integer currentPage, Integer pageSize) throws RecordNotFoundException {
         // 非空验证 TODO
         // 查询总数据条数
         Integer count=mapper.getCountByName(name);
@@ -79,7 +79,7 @@ public class ProductServiceImpl implements IProductService {
         // 计算recordIndex=(currentPage-1)*pageSize
         Integer recordIndex=(currentPage-1)*pageSize;
         // 查询当前页记录
-        List<Product> data=mapper.listAllByName(name,null,recordIndex,pageSize);
+        List<Product> data=mapper.listAllByName(name,tag,order,recordIndex,pageSize);
         // 判断结果是否为null 或 长度是否为0
         if(data==null || data.size()==0){
             // 是：RecordNotFoundException
@@ -95,38 +95,6 @@ public class ProductServiceImpl implements IProductService {
         return pageRecord;
     }
 
-    @Override
-    public PageRecord<List<Product>> findProductByName(String name, Integer order, Integer currentPage, Integer pageSize) throws RecordNotFoundException {
-        // 非空验证 TODO
-        // 查询总数据条数
-        Integer count=mapper.getCountByName(name);
-        // 判断结果是否为0
-        if(count==0){
-            // 是：RecordNotFoundException
-            throw new RecordNotFoundException("分页查询商品异常：未查到相关记录");
-        }
-        // 超过上限则使用上限
-        if(pageSize>MAX_PAGE_SIZE){
-            pageSize=MAX_PAGE_SIZE;
-        }
-        // 计算recordIndex=(currentPage-1)*pageSize
-        Integer recordIndex=(currentPage-1)*pageSize;
-        // 查询当前页记录
-        List<Product> data=mapper.listAllByName(name,order,recordIndex,pageSize);
-        // 判断结果是否为null 或 长度是否为0
-        if(data==null || data.size()==0){
-            // 是：RecordNotFoundException
-            throw new RecordNotFoundException("分页查询商品异常：未查到当前页记录");
-        }
-
-        // 计算pageCount=(count-1)/pageSize+1
-        Integer pageCount=(count-1)/pageSize+1;
-        // 创建PageRecord，封装数据
-        PageRecord<List<Product>> pageRecord =
-                new PageRecord<>(pageSize,count,pageCount,currentPage,data);
-        // 返回PageRecord
-        return pageRecord;
-    }
 
     @Override
     public PageRecord<List<Product>> findProductByCid(
