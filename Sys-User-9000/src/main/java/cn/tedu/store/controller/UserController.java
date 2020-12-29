@@ -63,7 +63,6 @@ public class UserController {
         String filename= UUID.randomUUID().toString()+suffix;
         // 生成目标路径
         String filePath=request.getServletContext().getRealPath("upload");
-        System.out.println(filePath);
         File parent=new File(filePath);
         if(!parent.exists()) {
             parent.mkdirs();//创建对应的目录
@@ -84,7 +83,6 @@ public class UserController {
         String avatar="/upload/"+filename;
         UserEntity user=(UserEntity) session.getAttribute("user");
         Integer uid=user.getUid();
-        System.out.println("--------------------" + user + "   " + uid);
         String username=user.getUsername();
         service.changeAvatar(uid,avatar,username);
         return new JsonResult<String>(1000,"OK", "http://localhost:9000/" + avatar);
@@ -93,8 +91,6 @@ public class UserController {
     @RequestMapping("/findUserInfo")
     public JsonResult<UserEntity> findUserInfo(HttpSession session,HttpServletRequest httpServletRequest){
         UserEntity user=(UserEntity)session.getAttribute("user");
-        System.out.println(user);
-        System.out.println("::"+httpServletRequest.getHeader("Origin"));
         return new JsonResult<>(1000,"OK",user);
     }
 
@@ -191,7 +187,6 @@ public class UserController {
     @GetMapping("/queryFavoriteById")
     public JsonResult<List<Product>> queryFavoriteById(HttpSession session){
         UserEntity user=(UserEntity)session.getAttribute("user");
-        System.out.println(user);
         return new JsonResult<List<Product>>(1000,"OK",service.queryFavoriteById(user.getUid()));
     }
 
@@ -204,7 +199,6 @@ public class UserController {
     @PostMapping("/addFavorite")
     public JsonResult<Void> addFavorite(HttpSession session,Integer pid){
         UserEntity user=(UserEntity)session.getAttribute("user");
-        System.out.println(user);
         service.addFavorite(user.getUid(),pid);
         return new JsonResult<Void>(1000,"OK");
     }
