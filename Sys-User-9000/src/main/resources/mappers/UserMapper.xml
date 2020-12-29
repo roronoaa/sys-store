@@ -142,6 +142,12 @@
 		delete from t_favorite
 		where uid=#{uid} and pid=#{pid}
 	</delete>
+
+	<select id="findFavorite" resultType="Integer">
+		select count(*) from t_favorite
+		where uid=#{uid}
+		and pid=#{pid}
+	</select>
 </mapper>
 
 

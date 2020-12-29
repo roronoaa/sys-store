@@ -121,4 +121,5 @@ public interface IUserService {
      * @param pid
      */
     void deleteFavorite(Integer uid,Integer pid);
+    Integer isFavorite(Integer uid,Integer pid);
 }

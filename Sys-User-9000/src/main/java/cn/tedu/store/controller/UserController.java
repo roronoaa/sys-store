@@ -220,4 +220,17 @@ public class UserController {
         service.deleteFavorite(((UserEntity)session.getAttribute("user")).getUid(),pid);
         return new JsonResult<Void>(1000,"OK");
     }
+
+    /**
+     * 判断是否收藏
+     * @param session
+     * @param pid
+     * @return
+     */
+    @GetMapping("/isFavorite")
+    public JsonResult<Integer> isFavorite(HttpSession session,Integer pid){
+        UserEntity user=(UserEntity)session.getAttribute("user");
+        return JsonResult.getSuccessJR(service.isFavorite(user.getUid(),pid));
+    }
+
 }

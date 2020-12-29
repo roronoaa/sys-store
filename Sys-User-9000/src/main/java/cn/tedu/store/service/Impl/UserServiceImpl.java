@@ -379,4 +379,13 @@ public class UserServiceImpl implements IUserService {
         return password;
     }
 
+    /**
+     * 判断是否收藏了该商品
+     * @param uid
+     * @param pid
+     * @return
+     */
+    public Integer isFavorite(Integer uid,Integer pid){
+        return mapper.findFavorite(uid,pid);
+    }
 }
