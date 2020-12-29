@@ -46,7 +46,17 @@ public interface IProductService {
     PageRecord<List<Product>> findProductByName(String name,
                                                 Integer currentPage, Integer pageSize)
             throws RecordNotFoundException;
-
+    /**
+     * 基于商品名称模糊、分页查询商品记录并排序
+     * @param name 商品名称
+     * @param currentPage 当前页页码
+     * @param pageSize 每页数据条数
+     * @throws RecordNotFoundException
+     * @return
+     */
+    PageRecord<List<Product>> findProductByName(String name,Integer order,
+                                                Integer currentPage, Integer pageSize)
+            throws RecordNotFoundException;
     /**
      * 基于商品种类id分页查询商品记录
      * @param cid 商品种类id

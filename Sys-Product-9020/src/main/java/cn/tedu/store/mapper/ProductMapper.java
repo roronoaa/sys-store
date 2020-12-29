@@ -34,9 +34,14 @@ public interface ProductMapper {
      * @return
      */
     List<Product> listAllByName(@Param("name") String name,
+                                @Param("order")Integer order,
                                 @Param("recordIndex") Integer recordIndex,
                                 @Param("pageSize") Integer pageSize);
 
+//    List<Product> listAllByNameOrdered(@Param("name") String name,
+//                                @Param("order")Integer order,
+//                                @Param("recordIndex") Integer recordIndex,
+//                                @Param("pageSize") Integer pageSize);
     /**
      * 基于商品种类id查询总数据条数
      * @param cid 商品种类id

@@ -76,7 +76,21 @@
 		  and
 			status=1
 		order by
+		<if test="order==null">
+			priority desc,price desc
+		</if>
+		<if test="order==1">
 			priority desc
+		</if>
+		<if test="order==2">
+			price desc
+		</if>
+		<if test="order==3">
+			priority asc
+		</if>
+		<if test="order==4">
+			price asc
+		</if>
 		limit
 			#{recordIndex},#{pageSize}
 	</select>

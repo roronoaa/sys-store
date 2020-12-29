@@ -22,9 +22,9 @@ public class ProductController {
     IUserVisitLogService logService;
 
     @GetMapping("/findProductByName")
-    public JsonResult<PageRecord> findProductByName(String name,
+    public JsonResult<PageRecord> findProductByName(String name,Integer order,
                                                     Integer currentPage, Integer pageSize){
-        return JsonResult.getSuccessJR(service.findProductByName(name,currentPage,pageSize));
+        return JsonResult.getSuccessJR(service.findProductByName(name,order,currentPage,pageSize));
     }
 
     @GetMapping("/findProductByCid")
