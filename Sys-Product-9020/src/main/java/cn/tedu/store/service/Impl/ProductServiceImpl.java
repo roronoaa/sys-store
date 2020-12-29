@@ -11,6 +11,8 @@ import cn.tedu.store.mapper.ProductMapper;
 import cn.tedu.store.service.IProductService;
 import cn.tedu.store.service.IUserVisitLogService;
 import cn.tedu.store.ex.ProductOutOfStockException;
+import cn.tedu.store.util.JsonResult;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -162,9 +164,10 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public List<Product> findFavourite(Integer uid) {
         // 基于uid查询用户近7天访问最多的商品种类
-        Integer cid = userVisitLogService.getCidByUid(uid);
-        if(cid==null){
-            cid=DEFAULT_CID;
+        JsonResult<Integer> result = userVisitLogService.getCidByUid(uid);
+        Integer cid = result.getData();
+        if (result == null || cid == null) {
+            cid = DEFAULT_CID;
         }
         // 基于cid随机查询4种商品信息
         List<Product> list=mapper.listByCid(cid);
