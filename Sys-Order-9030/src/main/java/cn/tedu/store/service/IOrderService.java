@@ -1,5 +1,6 @@
 package cn.tedu.store.service;
 
+import cn.tedu.store.entity.Bill;
 import cn.tedu.store.entity.Order;
 import cn.tedu.store.ex.*;
 import org.apache.ibatis.annotations.Param;
@@ -27,7 +28,7 @@ public interface IOrderService {
      * @param uid
      * @param username
      */
-    void createOrder(@RequestParam("aid") Integer aid, @RequestParam("cids") Integer[] cids,@RequestParam("uid") Integer uid, @RequestParam("username") String username);
+    Integer createOrder(@RequestParam("aid") Integer aid, @RequestParam("cids") Integer[] cids,@RequestParam("uid") Integer uid, @RequestParam("username") String username);
 
     /**
      * 基于订单id关闭订单支付窗口
@@ -46,4 +47,6 @@ public interface IOrderService {
     void changeStatus(@RequestParam("oid") Integer oid, @RequestParam("status") Integer status, @RequestParam("username") String username)
         throws UpdateException;
     void finishOrder(@RequestParam("uid") Integer uid, @RequestParam("oid") Integer oid,@RequestParam("username") String username)throws RecordNotFoundException;
+    Order findByOid(Integer oid);
+    List<Bill> selectBillByUid(Integer uid);
 }

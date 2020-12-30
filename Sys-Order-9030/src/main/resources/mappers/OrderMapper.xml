@@ -32,7 +32,18 @@
 			<result column="title" property="title" />
 		</collection>
 	</resultMap>
-
+	<resultMap id="billMap" type="cn.tedu.store.entity.Bill">
+		<result column="uid" property="uid"></result>
+		<result column="oid" property="oid"></result>
+		<result column="pid" property="pid"></result>
+		<result column="pname" property="pname"></result>
+		<result column="ptype" property="ptype"></result>
+		<result column="price" property="price"></result>
+		<result column="created_user" property="createdUser" />
+		<result column="created_time" property="createdTime" />
+		<result column="modified_user" property="modifiedUser" />
+		<result column="modified_time" property="modifiedTime" />
+	</resultMap>
 	<!--基于用户id查询该用户所有订单记录-->
 	<!-- List<Order> listByUid(Integer uid)-->
 	<select id="listByUid" resultMap="orderMap">
@@ -97,7 +108,7 @@
 	<!--Integer insertOrder(Order order)-->
 	<!--让MyBatis返回数据库生成的订单id-->
 	<insert id="insertOrder"
-		useGeneratedKeys="true" keyProperty="id">
+		useGeneratedKeys="true" keyProperty="id" >
 		insert into t_order(
 			uid, recv_name,
 		    recv_phone, recv_province,
@@ -144,6 +155,32 @@
 		delete from t_order_item
 		where oid=#{oid}
 	</delete>
+
+	<select id="selectBillByUid" resultMap="billMap">
+		SELECT
+			t_order.uid AS uid,t_order.id AS oid,
+			t_order_item.pid AS pid,t_order_item.title AS pname,
+			t_product_category.`name` AS ptype,
+			t_order_item.num AS num,t_order.price AS price,
+			t_order.created_time,t_order.created_user
+		from
+			t_order LEFT JOIN t_order_item
+		ON
+			t_order.id=t_order_item.oid
+		LEFT JOIN
+			t_product
+		ON
+			t_order_item.pid=t_product.id
+		LEFT JOIN
+			t_product_category
+		ON
+			t_product.category_id=t_product_category.id
+		WHERE
+			t_order.uid=#{uid} and t_order.status=1
+		ORDER BY
+			t_order_item.created_time
+	</select>
+
 </mapper>
 
 
