@@ -1,6 +1,7 @@
 package cn.tedu.store.entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -86,5 +87,15 @@ public class BaseEntity implements Serializable {
                 ", modifiedUser='" + modifiedUser + '\'' +
                 ", modifiedTime=" + modifiedTime +
                 '}';
+    }
+    public String getLocalCreateTime() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-M-dd HH:mm:ss");//设置日期格式
+        String date = df.format(this.createdTime);
+        return date;
+    }
+    public String getLocalUpdateTime() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-M-dd HH:mm:ss");//设置日期格式
+        String date = df.format(modifiedTime);
+        return date;
     }
 }

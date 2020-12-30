@@ -7,6 +7,7 @@ import cn.tedu.store.service.IOrderService;
 import cn.tedu.store.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,4 +49,11 @@ public class OrderController {
     public JsonResult<Order> getOrder(HttpSession session,Integer oid){
         return JsonResult.getSuccessJR(service.findByOid(oid));
     }
+    @PostMapping("/updateStatusByOid")
+    public JsonResult<Void> cancelOrderByOid(Integer oid,Integer status,HttpSession session){
+        UserEntity user=(UserEntity)session.getAttribute("user");
+        service.changeStatus(oid,status,user.getUsername());
+        return JsonResult.getSuccessJR();
+    }
+
 }
