@@ -51,6 +51,7 @@ public class ProductController {
     @GetMapping("/{id}/get")
     @HystrixCommand(fallbackMethod = "findByIdHystrix")
     public JsonResult<Product> findById(@PathVariable("id") Integer id, HttpSession session){
+
         Product product=service.findById(id);
         // 生成访问记录
         if (null == product) {

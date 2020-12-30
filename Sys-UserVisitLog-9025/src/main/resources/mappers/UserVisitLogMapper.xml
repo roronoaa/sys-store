@@ -36,7 +36,29 @@
 			#{cid},now()
 		)
 	</insert>
+	<resultMap id="productResultMap" type="cn.tedu.store.entity.Product">
+		<id column="id" property="id"></id>
+		<result column="item_type" property="itemType"/>
+		<result column="title" property="title"/>
+		<result column="sell_point" property="sellPoint"/>
+		<result column="price" property="price"/>
+		<result column="num" property="num"/>
+		<result column="image" property="image"/>
+		<result column="status" property="status"/>
+		<result column="priority" property="priority"/>
+		<result column="created_user" property="createdUser" />
+		<result column="created_time" property="createdTime" />
+		<result column="modified_user" property="modifiedUser" />
+		<result column="modified_time" property="modifiedTime" />
 
+	</resultMap>
+	<select id="listProductsVisited" resultMap="productResultMap">
+		select t_product.* from t_product
+		left join t_user_visit_log
+		on t_product.id=t_user_visit_log.pid
+		where t_user_visit_log.uid=#{uid}
+		order by created_time desc
+	</select>
 </mapper>
 
 

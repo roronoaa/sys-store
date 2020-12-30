@@ -1,6 +1,9 @@
 package cn.tedu.store.mapper;
 
+import cn.tedu.store.entity.Product;
 import cn.tedu.store.entity.UserVisitLog;
+
+import java.util.List;
 
 /**
  * 用户访问商品详情记录的持久层接口
@@ -22,4 +25,10 @@ public interface UserVisitLogMapper {
      */
     Integer insertVisitLog(UserVisitLog log);
 
+    /**
+     * 查询浏览商品记录
+     * @param uid
+     * @return
+     */
+    List<Product> listProductsVisited(Integer uid);
 }

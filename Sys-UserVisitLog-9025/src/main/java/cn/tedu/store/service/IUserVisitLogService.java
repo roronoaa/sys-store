@@ -1,6 +1,9 @@
 package cn.tedu.store.service;
 
+import cn.tedu.store.entity.Product;
 import cn.tedu.store.entity.UserVisitLog;
+
+import java.util.List;
 
 /**
  * 用户访问商品详情记录的业务层接口
@@ -14,4 +17,6 @@ public interface IUserVisitLogService {
     void saveVisitLog(UserVisitLog log);
 
     Integer getCidByUid(Integer uid);
+
+    List<Product> getProductsVisitedList(Integer uid);
 }

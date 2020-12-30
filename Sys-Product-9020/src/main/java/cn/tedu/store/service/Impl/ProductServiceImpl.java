@@ -1,9 +1,6 @@
 package cn.tedu.store.service.Impl;
 
-import cn.tedu.store.entity.Category;
-import cn.tedu.store.entity.PageRecord;
-import cn.tedu.store.entity.Product;
-import cn.tedu.store.entity.ProductCategory;
+import cn.tedu.store.entity.*;
 import cn.tedu.store.ex.EmptyArgumentException;
 import cn.tedu.store.ex.RecordNotFoundException;
 import cn.tedu.store.ex.UpdateException;
@@ -17,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -183,11 +181,16 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Product findById(Integer id) throws EmptyArgumentException {
+    public Product findById(Integer uid,Integer id) throws EmptyArgumentException {
         if(id==null){
             throw new EmptyArgumentException("查询商品数据异常：id不能为空");
         }
-        return mapper.getById(id);
+        UserVisitLog log=new UserVisitLog();
+        Product product=mapper.getById(id);
+        log.setUid(uid);
+        log.setPid(product.getId());
+        userVisitLogService.saveVisitLog(log);
+        return product;
     }
 
     @Override

@@ -1,10 +1,13 @@
 package cn.tedu.store.service.Impl;
 
+import cn.tedu.store.entity.Product;
 import cn.tedu.store.entity.UserVisitLog;
 import cn.tedu.store.mapper.UserVisitLogMapper;
 import cn.tedu.store.service.IUserVisitLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserVisitLogImpl implements IUserVisitLogService {
@@ -20,6 +23,11 @@ public class UserVisitLogImpl implements IUserVisitLogService {
     @Override
     public Integer getCidByUid(Integer uid) {
         return mapper.getCidByUid(uid);
+    }
+
+    @Override
+    public List<Product> getProductsVisitedList(Integer uid) {
+        return mapper.listProductsVisited(uid);
     }
 
 }
