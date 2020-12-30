@@ -19,10 +19,10 @@ public class OrderController {
     IOrderService service;
 
     @RequestMapping("/create")
-    public JsonResult<Void> createOrder(Integer aid, Integer[] cids, HttpSession session){
+    public JsonResult<Integer> createOrder(Integer aid, Integer[] cids, HttpSession session){
         UserEntity user=(UserEntity)session.getAttribute("user");
-        service.createOrder(aid,cids,user.getUid(),user.getUsername());
-        return JsonResult.getSuccessJR();
+
+        return JsonResult.getSuccessJR(service.createOrder(aid,cids,user.getUid(),user.getUsername()));
     }
 
     @RequestMapping("/list")

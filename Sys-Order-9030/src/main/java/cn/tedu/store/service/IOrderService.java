@@ -27,7 +27,7 @@ public interface IOrderService {
      * @param uid
      * @param username
      */
-    void createOrder(@RequestParam("aid") Integer aid, @RequestParam("cids") Integer[] cids,@RequestParam("uid") Integer uid, @RequestParam("username") String username);
+    Integer createOrder(@RequestParam("aid") Integer aid, @RequestParam("cids") Integer[] cids,@RequestParam("uid") Integer uid, @RequestParam("username") String username);
 
     /**
      * 基于订单id关闭订单支付窗口

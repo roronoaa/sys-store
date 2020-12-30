@@ -27,10 +27,12 @@ public interface ProductMapper {
     Integer getCountByName(String name);
 
     /**
-     * 基于商品名称模糊、分页查询商品
+     * 按商品名称模糊查询并排序
      * @param name 商品名称
-     * @param recordIndex 跳过的数据条数
-     * @param pageSize 查询的数据条数
+     * @param tag 排序关键字
+     * @param order 正序逆序 1表示正序 0表示逆序
+     * @param recordIndex
+     * @param pageSize
      * @return
      */
     List<Product> listAllByName(@Param("name") String name,

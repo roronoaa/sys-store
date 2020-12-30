@@ -98,7 +98,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     @Transactional
-    public void createOrder(Integer aid, Integer[] cids, Integer uid, String username)
+    public Integer createOrder(Integer aid, Integer[] cids, Integer uid, String username)
         throws RecordNotFoundException, ProductOutOfStockException, UpdateException,
             InsertException, DeleteException {
         // 创建当前时间对象
@@ -200,6 +200,7 @@ public class OrderServiceImpl implements IOrderService {
         cartService.removeCartList(cids);
         // 订单的限时支付
         delayCloseOrder(order.getId(),username);
+        return order.getId();
     }
 
     /**

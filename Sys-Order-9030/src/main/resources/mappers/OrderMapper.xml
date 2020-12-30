@@ -97,7 +97,20 @@
 	<!--Integer insertOrder(Order order)-->
 	<!--让MyBatis返回数据库生成的订单id-->
 	<insert id="insertOrder"
-		useGeneratedKeys="true" keyProperty="id">
+		useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+         insert into ko_order
+         (ko_order.ko_goods_id,
+            ko_order.user_id,
+            ko_order.buy_num,
+            ko_order.createtime)
+            value(
+            #{koGoodsId},
+            #{userId},
+            #{buyNum},
+            #{createtime}
+            )
+    </insert>
+	>
 		insert into t_order(
 			uid, recv_name,
 		    recv_phone, recv_province,
