@@ -91,6 +91,16 @@ public class OrderServiceImpl implements IOrderService {
             throw new UpdateException("更新订单支付时间异常：数据更新失败");
         }
     }
+
+    @Override
+    public Order findByOid( Integer oid) {
+        Order order=mapper.getById(oid);
+        if(order==null){
+            throw new QueryException("获取订单异常：订单不存在");
+        }
+        return order;
+    }
+
     @Override
     public List<Order> findByUid(Integer uid) {
         return mapper.listByUid(uid);
@@ -201,6 +211,19 @@ public class OrderServiceImpl implements IOrderService {
         // 订单的限时支付
         delayCloseOrder(order.getId(),username);
         return order.getId();
+    }
+    /**
+     * 根据Uid搜索所有历史已支付账单
+     * @param uid
+     * @return
+     */
+
+    @Override
+    public List<Bill> selectBillByUid(Integer uid) {
+        if(mapper.selectBillByUid(uid)==null) {
+            throw new QueryException("查询历史账单异常：该用户目前还未有任何账单");
+        }
+        return mapper.selectBillByUid(uid);
     }
 
     /**

@@ -1,5 +1,6 @@
 package cn.tedu.store.mapper;
 
+import cn.tedu.store.entity.Bill;
 import cn.tedu.store.entity.Order;
 import cn.tedu.store.entity.OrderItem;
 import org.apache.ibatis.annotations.Param;
@@ -57,4 +58,11 @@ public interface OrderMapper {
      * @return
      */
     Integer insertOrderItem(OrderItem orderItem);
+    /**
+     * 基于Uid查询订单号、商品id、商品类别等
+     * @param uid
+     * @return
+     */
+    List<Bill> selectBillByUid(Integer uid);
+
 }

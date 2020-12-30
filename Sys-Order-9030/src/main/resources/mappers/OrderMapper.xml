@@ -97,20 +97,7 @@
 	<!--Integer insertOrder(Order order)-->
 	<!--让MyBatis返回数据库生成的订单id-->
 	<insert id="insertOrder"
-		useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
-         insert into ko_order
-         (ko_order.ko_goods_id,
-            ko_order.user_id,
-            ko_order.buy_num,
-            ko_order.createtime)
-            value(
-            #{koGoodsId},
-            #{userId},
-            #{buyNum},
-            #{createtime}
-            )
-    </insert>
-	>
+		useGeneratedKeys="true" keyProperty="id" >
 		insert into t_order(
 			uid, recv_name,
 		    recv_phone, recv_province,
@@ -157,6 +144,32 @@
 		delete from t_order_item
 		where oid=#{oid}
 	</delete>
+
+	<select id="selectBillByUid">
+		SELECT
+			t_order.uid AS uid,t_order.id AS oid,
+			t_order_item.pid AS pid,t_order_item.title AS pname,
+			t_product_category.`name` AS ptype,
+			t_order_item.num AS num,t_order.price AS price,
+			t_order.created_time AS ordertime
+		from
+			t_order LEFT JOIN t_order_item
+		ON
+			t_order.id=t_order_item.oid
+		LEFT JOIN
+			t_product
+		ON
+			t_order_item.pid=t_product.id
+		LEFT JOIN
+			t_product_category
+		ON
+			t_product.category_id=t_product_category.id
+		WHERE
+			t_order.uid=#{uid} and t_order.status=1
+		ORDER BY
+			t_order_item.created_time
+	</select>
+
 </mapper>
 
 
