@@ -2,6 +2,18 @@ server:
   port: 9000
 
 spring:
+  mail:
+    host: smtp.qq.com
+    username: 53643752@qq.com
+    password: pmouprdjnqgacbad
+    default-encoding: utf-8
+    properties:
+      main:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
   application:
     name: USER
   datasource:
@@ -21,3 +33,10 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+oss:
+  qiniu:
+    domain: qlbwsydnk.hd-bkt.clouddn.com
+    accessKey: Bs_qnGxtC-W4rzBTdOAC4GJppd4PvOF_XJcwkKhJ
+    secretKey: I3e2-SH8gMVr2Z95F9uNfEPC0D0JZC50Doh9exaY
+    bucketName: edu-sys

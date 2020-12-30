@@ -10,6 +10,7 @@ import cn.tedu.store.service.ex.*;
 import cn.tedu.store.util.JsonResult;
 
 import javax.servlet.http.HttpSession;
+import java.io.FileInputStream;
 import java.util.List;
 
 /**
@@ -123,4 +124,10 @@ public interface IUserService {
     void deleteFavorite(Integer uid,Integer pid);
     Integer isFavorite(Integer uid,Integer pid);
     Integer addPoint(Integer uid,Integer point);
+
+    public String uploadAvatar(Integer userId, FileInputStream file, String key);
+
+    String queryUserEmailByUserName(String username);
+
+    void resetPassword(String username, String code, String password);
 }

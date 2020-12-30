@@ -151,9 +151,33 @@
 	</select>
 	<update id="addPoint">
 		update t_user
-		set point=#{point}+point
+		set point=#{point} + point
 		where uid=#{uid}
 	</update>
+
+	<update id="updateImageByUid">
+		update t_user
+		set avatar = #{iamges}
+		where uid = #{uid}
+	</update>
+
+	<select id="queryUserEmailByUserName" resultType="String">
+		SELECT email
+		FROM t_user
+		WHERE username = #{username}
+	</select>
+
+	<update id="updateUserPassword">
+		UPDATE t_user
+		SET password = #{password}
+		WHERE username = #{username}
+	</update>
+
+	<select id="findByUserName" resultType="cn.tedu.store.entity.UserEntity">
+		SELECT *
+		FROM t_user
+		WHERE username = #{username}
+	</select>
 </mapper>
 
 

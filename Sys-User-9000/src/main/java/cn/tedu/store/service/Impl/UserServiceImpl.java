@@ -1,5 +1,7 @@
 package cn.tedu.store.service.Impl;
 
+import cn.tedu.store.config.QiNiuCloudStorageConfig;
+import cn.tedu.store.controller.ex.ParameterErrorException;
 import cn.tedu.store.entity.Product;
 import cn.tedu.store.ex.*;
 import cn.tedu.store.mapper.UserMapper;
@@ -7,12 +9,22 @@ import cn.tedu.store.entity.UserEntity;
 import cn.tedu.store.service.IUserService;
 import cn.tedu.store.service.ex.*;
 import cn.tedu.store.util.JsonResult;
+import cn.tedu.store.util.RedisUtil;
+import com.google.gson.Gson;
+import com.qiniu.common.QiniuException;
+import com.qiniu.common.Zone;
+import com.qiniu.http.Response;
+import com.qiniu.storage.Configuration;
+import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.DefaultPutRet;
+import com.qiniu.util.Auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
+import java.io.FileInputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +36,12 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired(required = false)
     UserMapper mapper;
+
+    @Autowired
+    QiNiuCloudStorageConfig config;
+
+    @Autowired
+    RedisUtil redisUtil;
 
     @Override
     public UserEntity queryByUid(Integer uid) {
@@ -392,5 +410,54 @@ public class UserServiceImpl implements IUserService {
     @Override
     public Integer addPoint(Integer uid,Integer point) {
         return mapper.addPoint(uid,point);
+    }
+
+    @Override
+    public String uploadAvatar(Integer userId, FileInputStream file, String key) {
+        // 构造一个带指定Zone对象的配置类, 注意这里的Zone.zone0需要根据主机选择
+        UploadManager uploadManager = new UploadManager(new Configuration(Zone.autoZone()));
+        Auth auth = Auth.create(config.getQiniuAccessKey(), config.getQiniuSecretKey());
+        // 根据命名空间生成的上传token
+        String token = auth.uploadToken(config.getQiniuBucketName());
+        int row = 0;
+        try{
+            // 上传图片文件
+            Response res = uploadManager.put(file, key, token, null, null);
+            if (!res.isOK()) {
+                throw new RuntimeException("上传七牛出错：" + res.toString());
+            }
+            // 解析上传成功的结果
+            DefaultPutRet putRet = new Gson().fromJson(res.bodyString(), DefaultPutRet.class);
+            String returnPath = "http://" + config.getQiniuDomain() + "/" + putRet.key;
+            row = mapper.updateImageByUid(userId, returnPath);
+            if (row == 1) {
+                return returnPath;
+            }
+        }catch (QiniuException e){
+            throw new UpdateException("七牛云异常: 图片上传失败," + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public String queryUserEmailByUserName(String username) {
+        UserEntity user = mapper.findByUserName(username);
+        if (user == null) throw new ParameterErrorException("该用户名不存在!");
+        return mapper.queryUserEmailByUserName(username);
+    }
+
+    @Override
+    public void resetPassword(String username, String code, String password) {
+        UserEntity user = mapper.findByUserName(username);
+        String serverCode = (String) redisUtil.get(username + ":code");
+        if (null == serverCode) {
+            throw new ParameterErrorException("参数错误: 验证码已过期,请重新点击发送!");
+        }
+        if (!serverCode.equals(code.trim())) {
+            throw new ParameterErrorException("参数错误: 验证码不正确,请检查验证码是否正确!");
+        }
+        Integer row = mapper.updateUserPassword(username, getMD5Password(user.getPassword(), user.getSalt(),HASH_TIME));
+        if (row != 1) throw new UpdateException("更新错误: 用户密码更新错误,请联系管理员!");
+        redisUtil.del(username + ":code");
     }
 }

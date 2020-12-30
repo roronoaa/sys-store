@@ -77,5 +77,14 @@ public interface UserMapper {
     Integer deleteFavorite(@Param("uid") Integer uid,@Param("pid") Integer pid);
 
     Integer findFavorite(@Param("uid")Integer uid,@Param("pid")Integer pid);
+
     Integer addPoint(@Param("uid")Integer uid,@Param("point")Integer point);
+
+    Integer updateImageByUid(@Param("uid")Integer uid,@Param("iamges") String images);
+
+    String queryUserEmailByUserName(String username);
+
+    Integer updateUserPassword(@Param("username")String username,@Param("password") String password);
+
+    UserEntity findByUserName(String username);
 }

@@ -1,7 +1,9 @@
 package cn.tedu.store.controller;
 
 
+import cn.tedu.store.controller.ex.*;
 import cn.tedu.store.ex.*;
+import cn.tedu.store.ex.FileUploadException;
 import cn.tedu.store.util.JsonResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ServiceException.class)
+    @ExceptionHandler(RuntimeException.class)
     @ResponseBody
     public JsonResult<Void> handleCustomException(Throwable e){
         JsonResult<Void> jr=new JsonResult<Void>();
@@ -61,6 +63,24 @@ public class GlobalExceptionHandler {
         }
         if(e instanceof ServiceException) {
             jr.setState(2015);
+        }
+        if(e instanceof EmptyFileException) {
+            jr.setState(2016);
+        }
+        if(e instanceof FileExternDisMatchException) {
+            jr.setState(2017);
+        }
+        if(e instanceof FileOutOfMaxSizeException) {
+            jr.setState(2018);
+        }
+        if(e instanceof cn.tedu.store.controller.ex.FileUploadException) {
+            jr.setState(2019);
+        }
+        if(e instanceof ParameterErrorException) {
+            jr.setState(2020);
+        }
+        if(e instanceof EmailDisMatch) {
+            jr.setState(2021);
         }
         jr.setMsg(e.getMessage());
         return jr;

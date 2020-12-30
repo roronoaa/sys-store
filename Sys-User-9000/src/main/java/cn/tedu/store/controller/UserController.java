@@ -1,24 +1,37 @@
 package cn.tedu.store.controller;
 
+import cn.hutool.core.util.IdUtil;
+import cn.tedu.store.controller.ex.EmailDisMatch;
+import cn.tedu.store.controller.ex.ParameterErrorException;
 import cn.tedu.store.entity.Product;
 import cn.tedu.store.entity.UserEntity;
 import cn.tedu.store.ex.*;
 import cn.tedu.store.service.IUserService;
 import cn.tedu.store.util.JsonResult;
+import cn.tedu.store.util.MailUtil;
+import cn.tedu.store.util.ParameterUtils;
+import cn.tedu.store.util.RedisUtil;
 import com.netflix.ribbon.proxy.annotation.Http;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -28,7 +41,16 @@ public class UserController {
     private static final long AVATAR_MAX_SIZE=600*1024;
 
     private static final List<String> AVATAR_TYPES=new ArrayList<>();
+    @Autowired(required = false)
+    JavaMailSender mailSender;
+    @Value("${spring.mail.username}")
+    private String sender;
 
+    @Autowired
+    RedisUtil redisUtil;
+
+    private static final String EMAIL_REGEX = "^\\s*?(.+)@(.+?)\\s*$";
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
     // 静态初始化器：用于初始化本类的静态成员
     static {
         AVATAR_TYPES.add("image/jpeg");
@@ -233,6 +255,66 @@ public class UserController {
         UserEntity user=(UserEntity)session.getAttribute("user");
         service.addPoint(user.getUid(),point);
         session.setAttribute("user",service.queryByUid(user.getUid()));
+        return JsonResult.getSuccessJR();
+    }
+
+    @PostMapping("/avater")
+    public JsonResult upLoadImage(
+            @RequestParam(value = "file", required = true) MultipartFile file,
+            HttpSession session) throws IOException {
+        ParameterUtils.checkFileUpload(file, 0.5, Arrays.asList(".jpg", ".jpeg", ".bmp", ".gif", ".png"));
+        Map<String, Object> map = new HashMap<>();
+        String fileName = file.getOriginalFilename();
+        String fileExt = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        Integer userId = user.getUid();
+        String imgName = userId + IdUtil.simpleUUID() + fileExt ;
+        FileInputStream inputStream = (FileInputStream) file.getInputStream();
+        String userAvatarUrl = service.uploadAvatar(userId, inputStream, imgName);
+        map.put("data", userAvatarUrl);
+        return JsonResult.getSuccessJR(map);
+    }
+
+    @GetMapping("/isExist")
+    public JsonResult isExist(String username) {
+        String email = service.queryUserEmailByUserName(username);
+        if (null == email) {
+            throw new ParameterErrorException("未绑定邮箱!");
+        }
+        Matcher emailMatcher = EMAIL_PATTERN.matcher(email);
+        if (!emailMatcher.matches()) throw new EmailDisMatch("数据异常: 用户绑定邮箱格式不正确!");
+        return JsonResult.getSuccessJR();
+    }
+
+    @GetMapping("/sendEmail")
+    public JsonResult sendEmail(String username) {
+        String email = service.queryUserEmailByUserName(username);
+        MimeMessage message = null;
+        try {
+            message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(sender);
+            helper.setTo(email);
+            helper.setSubject("主题：请查收您的验证码");
+            String text = MailUtil.readToString(ResourceUtils.getFile("classpath:static/MailTemplate.html"));
+            String code = "";
+            Random random = new Random();
+            for (int i = 0; i < 4; i++) {
+                code += random.nextInt(9);
+            }
+            redisUtil.set(username + ":code", code, 300);
+            text = text.replace("182614", code);
+            helper.setText(text, true);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        mailSender.send(message);
+        return JsonResult.getSuccessJR();
+    }
+
+    @PostMapping("/findPassword")
+    public JsonResult findPassword(String username, String code, String password) {
+        service.resetPassword(username, code, password);
         return JsonResult.getSuccessJR();
     }
 }
