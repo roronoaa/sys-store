@@ -32,7 +32,7 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     @Transactional
-    public void increaseProductNum(Integer pid, Integer num) throws RecordNotFoundException, UpdateException {
+    public void increaseProductNum(Long pid, Integer num) throws RecordNotFoundException, UpdateException {
         Product product=findByIdForUpdate(pid);
         if(product==null){
             throw new RecordNotFoundException("增加商品库存异常：商品不存在");
@@ -46,7 +46,7 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     @Transactional
-    public void reduceProductNum(Integer pid, Integer num)
+    public void reduceProductNum(Long pid, Integer num)
             throws RecordNotFoundException, ProductOutOfStockException, UpdateException {
         Product product=findByIdForUpdate(pid);
         if(product==null){
@@ -173,7 +173,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Product findByIdForUpdate(Integer id) throws EmptyArgumentException {
+    public Product findByIdForUpdate(Long id) throws EmptyArgumentException {
         if(id==null){
             throw new EmptyArgumentException("查询商品数据异常：id不能为空");
         }
@@ -181,7 +181,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Product findById(Integer id) throws EmptyArgumentException {
+    public Product findById(Long id) throws EmptyArgumentException {
 
         Product product=mapper.getById(id);
         return product;

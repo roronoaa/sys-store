@@ -11,14 +11,14 @@ public class UserVisitLog implements Serializable {
 
     private Integer id;
     private Integer uid; //用户id
-    private Integer pid; //商品id
+    private Long pid; //商品id
     private Integer cid; //商品种类id
     private Date createdTime; //数据创建时间
 
     public UserVisitLog() {
     }
 
-    public UserVisitLog(Integer id, Integer uid, Integer pid, Integer cid, Date createdTime) {
+    public UserVisitLog(Integer id, Integer uid, Long pid, Integer cid, Date createdTime) {
         this.id = id;
         this.uid = uid;
         this.pid = pid;
@@ -42,11 +42,11 @@ public class UserVisitLog implements Serializable {
         this.uid = uid;
     }
 
-    public Integer getPid() {
+    public Long getPid() {
         return pid;
     }
 
-    public void setPid(Integer pid) {
+    public void setPid(Long pid) {
         this.pid = pid;
     }
 

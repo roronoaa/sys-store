@@ -17,7 +17,7 @@ public interface ProductMapper {
      * @param num 新的库存数量
      * @return
      */
-    Integer updateNumById(@Param("id") Integer id, @Param("num") Integer num);
+    Integer updateNumById(@Param("id") Long id, @Param("num") Integer num);
 
     /**
      * 基于商品名称模糊查询总数据条数
@@ -84,14 +84,14 @@ public interface ProductMapper {
      * @param id
      * @return
      */
-    Product getByIdForUpdate(Integer id);
+    Product getByIdForUpdate(Long id);
 
     /**
      * 基于商品id查询商品信息
      * @param id
      * @return
      */
-    Product getById(Integer id);
+    Product getById(Long id);
 
     /**
      * 显示热销排行商品

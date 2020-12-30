@@ -24,7 +24,7 @@ public interface IProductService {
      * @throws RecordNotFoundException
      * @throws UpdateException
      */
-    void increaseProductNum(Integer pid,Integer num)
+    void increaseProductNum(Long pid,Integer num)
             throws RecordNotFoundException, UpdateException;
 
     /**
@@ -32,7 +32,7 @@ public interface IProductService {
      * @param pid 商品id
      * @param num 要减少的库存数量
      */
-    void reduceProductNum(Integer pid,Integer num)
+    void reduceProductNum(Long pid,Integer num)
         throws RecordNotFoundException, ProductOutOfStockException, UpdateException;
 
 
@@ -83,7 +83,7 @@ public interface IProductService {
      * @param id
      * @return
      */
-    Product findByIdForUpdate(Integer id)
+    Product findByIdForUpdate(Long id)
             throws EmptyArgumentException;
 
     /**
@@ -91,7 +91,7 @@ public interface IProductService {
      * @param id
      * @return
      */
-    Product findById(Integer id)
+    Product findById(Long id)
         throws EmptyArgumentException;
 
     /**

@@ -50,7 +50,7 @@ public class ProductController {
 
     @GetMapping("/{id}/get")
     @HystrixCommand(fallbackMethod = "findByIdHystrix")
-    public JsonResult<Product> findById(@PathVariable("id") Integer id, HttpSession session){
+    public JsonResult<Product> findById(@PathVariable("id") Long id, HttpSession session){
 
         Product product=service.findById(id);
         // 生成访问记录
@@ -83,17 +83,17 @@ public class ProductController {
     }
 
     @PostMapping("/increaseProductNum")
-    public void increaseProductNum(Integer pid,Integer num) {
+    public void increaseProductNum(Long pid,Integer num) {
         service.increaseProductNum(pid, num);
     }
 
     @PostMapping("/reduceProductNum")
-    public void reduceProductNum(Integer pid,Integer num) {
+    public void reduceProductNum(Long pid,Integer num) {
         service.reduceProductNum(pid, num);
     }
 
     @GetMapping("/findProductById")
-    public Product findProductById(Integer pid) {
+    public Product findProductById(Long pid) {
         return service.findById(pid);
     }
 

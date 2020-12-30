@@ -8,7 +8,7 @@ import java.util.Objects;
  */
 public class Product extends BaseEntity{
 
-    private Integer id;
+    private Long id;
     private ProductCategory category;
     private String itemType;
     private String title;
@@ -22,7 +22,7 @@ public class Product extends BaseEntity{
     public Product() {
     }
 
-    public Product(String createdUser, Date createdTime, String modifiedUser, Date modifiedTime, Integer id, ProductCategory category, String itemType, String title, String sellPoint, Long price, Integer num, String image, Integer status, Integer priority) {
+    public Product(String createdUser, Date createdTime, String modifiedUser, Date modifiedTime, Long id, ProductCategory category, String itemType, String title, String sellPoint, Long price, Integer num, String image, Integer status, Integer priority) {
         super(createdUser, createdTime, modifiedUser, modifiedTime);
         this.id = id;
         this.category = category;
@@ -36,11 +36,11 @@ public class Product extends BaseEntity{
         this.priority = priority;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
