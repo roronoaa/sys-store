@@ -87,7 +87,7 @@ public interface ProductMapper {
     Product getByIdForUpdate(Long id);
 
     /**
-     * 基于商品id查询商品信息
+     * 基于商品id查询商品信息findAllCategory
      * @param id
      * @return
      */

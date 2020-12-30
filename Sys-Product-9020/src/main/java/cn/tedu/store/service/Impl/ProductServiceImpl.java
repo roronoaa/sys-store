@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -133,30 +134,56 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public List<Category> findAllCategory() {
+        System.out.println(1);
         List<ProductCategory> list=mapper.listAllCategory();
-        ArrayList<Category> mylist=new ArrayList<>();
-        for(ProductCategory p:list){
-            if(p.getParentId().equals(0)){
-                System.out.println(p.getSortOrder());
-                mylist.add(new Category(p.getId(),p.getSortOrder(),0,p.getName(),p.getParentId(),0.0,"",""));
-            }else{
-                for(Category mc:mylist){
-                    if(mc.getId().equals(p.getParentId())){
-                        mc.addMyCategory(new Category(p.getId(),p.getSortOrder(),0,p.getName(),p.getParentId(),0.0,"",""));
-                        break;
-                    }
-                    List<Category> temp=mc.getChildren();
-                    for(Category t:temp){
-                        if(t.getId().equals(p.getParentId())){
-                            t.addMyCategory(new Category(p.getId(),p.getSortOrder(),0,p.getName(),p.getParentId(),0.0,"",""));
-                            mc.setChildren(temp);
-                            break;
-                        }
-                    }
-                }
+        System.out.println(list.size());
+        //ArrayList<Category> mylist=new ArrayList<>();
+
+        HashMap<Integer,Category> categoryHashMap=new HashMap<>();
+        Category category=new Category(0,1,0,"",-1L,0.0,"","");
+        categoryHashMap.put(0,category);
+        ProductCategory pc;
+        Category c;
+        while(!list.isEmpty()){
+            //System.out.println(list.size());
+            pc=list.remove(0);
+            //System.out.println(pc.toString());
+            if(categoryHashMap.get(pc.getParentId().intValue())!=null){
+                c=new Category(pc.getId(),pc.getSortOrder(),0,pc.getName(),pc.getParentId(),0.0,"","");
+                categoryHashMap.get(pc.getParentId().intValue()).addMyCategory(c);
+                categoryHashMap.put(c.getId(),c);
+            }
+            else{
+                list.add(pc);
             }
         }
-        return mylist;
+        c=categoryHashMap.get(0);
+        return c.getChildren();
+
+//        for(ProductCategory p:list){
+//            if(p.getParentId().equals(0L)){
+//                System.out.println("++");
+//                System.out.println(p.getSortOrder());
+//                mylist.add(new Category(p.getId(),p.getSortOrder(),0,p.getName(),p.getParentId(),0.0,"",""));
+//            }else{
+//                for(Category mc:mylist){
+//                    if(mc.getId().equals(p.getParentId())){
+//                        mc.addMyCategory(new Category(p.getId(),p.getSortOrder(),0,p.getName(),p.getParentId(),0.0,"",""));
+//                        break;
+//                    }
+//                    List<Category> temp=mc.getChildren();
+//                    for(Category t:temp){
+//                        if(t.getId().equals(p.getParentId())){
+//                            t.addMyCategory(new Category(p.getId(),p.getSortOrder(),0,p.getName(),p.getParentId(),0.0,"",""));
+//                            mc.setChildren(temp);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        //System.out.println("::"+mylist.size());
+        //return mylist;
     }
 
     @Override

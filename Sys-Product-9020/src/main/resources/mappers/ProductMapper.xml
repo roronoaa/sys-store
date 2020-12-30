@@ -127,6 +127,7 @@
 		select id,parent_id, name,sort_order
 		from t_product_category
 		where status=1
+		order by id
 	</select>
 
 
