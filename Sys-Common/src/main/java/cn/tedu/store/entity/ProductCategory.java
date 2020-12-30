@@ -8,7 +8,7 @@ import java.util.Objects;
  */
 public class ProductCategory extends  BaseEntity{
 
-    private Integer id;
+    private Long id;
     private Integer parentId;
     private String name;
     private Integer status; // 状态 1：正常   0：删除
@@ -18,7 +18,7 @@ public class ProductCategory extends  BaseEntity{
     public ProductCategory() {
     }
 
-    public ProductCategory(String createdUser, Date createdTime, String modifiedUser, Date modifiedTime, Integer id, Integer parentId, String name, Integer status, Integer sortOrder, Integer isParent) {
+    public ProductCategory(String createdUser, Date createdTime, String modifiedUser, Date modifiedTime, Long id, Integer parentId, String name, Integer status, Integer sortOrder, Integer isParent) {
         super(createdUser, createdTime, modifiedUser, modifiedTime);
         this.id = id;
         this.parentId = parentId;
@@ -28,11 +28,11 @@ public class ProductCategory extends  BaseEntity{
         this.isParent = isParent;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -181,15 +181,9 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Product findById(Integer uid,Integer id) throws EmptyArgumentException {
-        if(id==null){
-            throw new EmptyArgumentException("查询商品数据异常：id不能为空");
-        }
-        UserVisitLog log=new UserVisitLog();
+    public Product findById(Integer id) throws EmptyArgumentException {
+
         Product product=mapper.getById(id);
-        log.setUid(uid);
-        log.setPid(product.getId());
-        userVisitLogService.saveVisitLog(log);
         return product;
     }
 

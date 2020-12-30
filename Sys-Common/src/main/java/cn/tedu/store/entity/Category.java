@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Category {
-    Integer id;
+    Long id;
     Integer isSort;
     Integer lev;
     String name;
@@ -14,7 +14,7 @@ public class Category {
     String thumb;
     List<Category> children;
 
-    public Category(Integer id, Integer isSort, Integer lev, String name, Integer pid, Double rate, String tags, String thumb) {
+    public Category(Long id, Integer isSort, Integer lev, String name, Integer pid, Double rate, String tags, String thumb) {
         this.id = id;
         this.isSort = isSort;
         this.lev = lev;
@@ -26,7 +26,7 @@ public class Category {
         children=new ArrayList<>();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -45,7 +45,7 @@ public class Category {
         this.children = children;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
