@@ -7,14 +7,15 @@ public class Bill extends BaseEntity{
     private Integer uid;
     private Integer oid;
     private Integer pid;
-    private Integer pname;
-    private Integer ptype;
+    private String pname;
+    private String ptype;
     private Integer price;
 
     public Bill() {
     }
 
-    public Bill(String createdUser, Date createdTime, String modifiedUser, Date modifiedTime, Integer uid, Integer oid, Integer pid, Integer pname, Integer ptype, Integer price) {
+
+    public Bill(String createdUser, Date createdTime, String modifiedUser, Date modifiedTime, Integer uid, Integer oid, Integer pid, String pname, String ptype, Integer price) {
         super(createdUser, createdTime, modifiedUser, modifiedTime);
         this.uid = uid;
         this.oid = oid;
@@ -22,6 +23,22 @@ public class Bill extends BaseEntity{
         this.pname = pname;
         this.ptype = ptype;
         this.price = price;
+    }
+
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
+    }
+
+    public String getPtype() {
+        return ptype;
+    }
+
+    public void setPtype(String ptype) {
+        this.ptype = ptype;
     }
 
     public Integer getUid() {
@@ -48,21 +65,7 @@ public class Bill extends BaseEntity{
         this.pid = pid;
     }
 
-    public Integer getPname() {
-        return pname;
-    }
 
-    public void setPname(Integer pname) {
-        this.pname = pname;
-    }
-
-    public Integer getPtype() {
-        return ptype;
-    }
-
-    public void setPtype(Integer ptype) {
-        this.ptype = ptype;
-    }
 
     public Integer getPrice() {
         return price;

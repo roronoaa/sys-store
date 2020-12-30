@@ -32,7 +32,18 @@
 			<result column="title" property="title" />
 		</collection>
 	</resultMap>
-
+	<resultMap id="billMap" type="cn.tedu.store.entity.Bill">
+		<result column="uid" property="uid"></result>
+		<result column="oid" property="oid"></result>
+		<result column="pid" property="pid"></result>
+		<result column="pname" property="pname"></result>
+		<result column="ptype" property="ptype"></result>
+		<result column="price" property="price"></result>
+		<result column="created_user" property="createdUser" />
+		<result column="created_time" property="createdTime" />
+		<result column="modified_user" property="modifiedUser" />
+		<result column="modified_time" property="modifiedTime" />
+	</resultMap>
 	<!--基于用户id查询该用户所有订单记录-->
 	<!-- List<Order> listByUid(Integer uid)-->
 	<select id="listByUid" resultMap="orderMap">
@@ -145,13 +156,13 @@
 		where oid=#{oid}
 	</delete>
 
-	<select id="selectBillByUid">
+	<select id="selectBillByUid" resultMap="billMap">
 		SELECT
 			t_order.uid AS uid,t_order.id AS oid,
 			t_order_item.pid AS pid,t_order_item.title AS pname,
 			t_product_category.`name` AS ptype,
 			t_order_item.num AS num,t_order.price AS price,
-			t_order.created_time AS ordertime
+			t_order.created_time,t_order.created_user
 		from
 			t_order LEFT JOIN t_order_item
 		ON
