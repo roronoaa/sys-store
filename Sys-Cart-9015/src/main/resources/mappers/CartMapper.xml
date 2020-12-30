@@ -26,7 +26,7 @@
 			t1.cid, t1.pid,
 			t1.price, t1.num, t1.uid,
 			t2.image, t2.title,
-			t2.price as realPrice
+			t2.price as realPrice,t1.check
 		from
 			t_cart t1 join t_product t2
 		on
