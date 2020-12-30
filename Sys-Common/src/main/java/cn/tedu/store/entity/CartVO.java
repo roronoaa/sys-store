@@ -16,11 +16,19 @@ public class CartVO implements Serializable {
     private Long price;
     private Integer num;
     private Integer uid;
-
+    private Integer check;
     public CartVO() {
     }
 
-    public CartVO(Integer cid, Integer pid, String image, String title, Long realPrice, Long price, Integer num, Integer uid) {
+    public Integer getCheck() {
+        return check;
+    }
+
+    public void setCheck(Integer check) {
+        this.check = check;
+    }
+
+    public CartVO(Integer cid, Integer pid, String image, String title, Long realPrice, Long price, Integer num, Integer uid, Integer check) {
         this.cid = cid;
         this.pid = pid;
         this.image = image;
@@ -29,6 +37,7 @@ public class CartVO implements Serializable {
         this.price = price;
         this.num = num;
         this.uid = uid;
+        this.check = check;
     }
 
     public Integer getUid() {

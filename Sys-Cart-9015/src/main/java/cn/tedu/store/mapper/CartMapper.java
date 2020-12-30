@@ -92,4 +92,5 @@ public interface CartMapper {
     Cart getByUidAndPid(@Param("uid") Integer uid,
                         @Param("pid") Integer pid);
     Integer setCheck(@Param("uid") Integer uid,@Param("cids") Integer[] cids,@Param("check") Integer check);
+    List<CartVO> listCartChecked(Integer uid);
 }

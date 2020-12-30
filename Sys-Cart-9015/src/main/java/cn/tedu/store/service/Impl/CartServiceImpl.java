@@ -189,4 +189,13 @@ public class CartServiceImpl implements ICartService {
         return mapper.setCheck(uid,cids,check);
     }
 
+    @Override
+    public List<CartVO> findCartCheckedList(Integer uid) {
+        List<CartVO> list=mapper.listCartChecked(uid);
+        if(list==null || list.size()==0){
+            throw new RecordNotFoundException("查询购物车列表异常：未查到记录");
+        }
+        return list;
+    }
+
 }

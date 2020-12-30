@@ -53,7 +53,12 @@ public class CartController {
         List<CartVO> list=service.findCartList(user.getUid());
         return JsonResult.getSuccessJR(list);
     }
-
+    @GetMapping("/listChecked")
+    public JsonResult<List<CartVO>> getCartCheckedList(HttpSession session){
+        UserEntity user=(UserEntity)session.getAttribute("user");
+        List<CartVO> list=service.findCartCheckedList(user.getUid());
+        return JsonResult.getSuccessJR(list);
+    }
     @PostMapping("/create")
     public JsonResult<Void> createCart(Integer pid, Integer num,
                                        HttpSession session){

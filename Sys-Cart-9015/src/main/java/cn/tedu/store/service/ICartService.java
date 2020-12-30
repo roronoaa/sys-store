@@ -66,4 +66,5 @@ public interface ICartService {
     void createCart(Integer pid, Integer num,Integer uid,String username)
             throws RecordNotFoundException, UpdateException, InsertException;
     Integer setCheck(Integer uid,Integer[] cids,Integer check);
+    List<CartVO> findCartCheckedList(Integer uid);
 }

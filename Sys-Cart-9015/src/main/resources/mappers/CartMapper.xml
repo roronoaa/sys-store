@@ -111,6 +111,23 @@
 			t1.created_time desc ;
 	</select>
 
+	<!--基于用户id查询所有选中的购物车记录-->
+	<select id="listCartChecked" resultType="cn.tedu.store.entity.CartVO" >
+		select
+			t1.cid, t1.pid,
+			t2.image, t2.title,
+			t2.price as realPrice, t1.price,
+			t1.num,t1.check
+		from
+			t_cart t1 left join t_product t2
+		on
+			t1.pid = t2.id
+		where
+			t1.uid=#{uid} and t1.check=1
+		order by
+			t1.created_time desc ;
+	</select>
+
 	<!--添加一条购物车记录-->
 	<!--Integer insertCart(Cart cart)-->
 	<insert id="insertCart" >
